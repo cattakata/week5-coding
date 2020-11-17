@@ -1,0 +1,49 @@
+---
+title: "Penguins Size Comparisons"
+author: "Catherine Takata"
+date: "11/16/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(palmerpenguins)
+library(effsize)
+library(broom)
+library(ggbeeswarm)
+library(car)
+```
+
+# Part 1. T-tests
+
+Mass Comparison: male and female Chinstrap penguins
+
+```{r}
+chinstraps <- penguins %>% 
+  filter(species == "Chinstrap")
+
+# Histograms 
+ggplot(data = chinstraps, aes(x = body_mass_g)) + 
+  geom_histogram(bins = 10) +
+  facet_wrap(~sex)
+# Histograms are somewhat bell shaped, so mean is a good measure of central tendency. Distribution is relativley normal for both. 
+
+## QQ Plot
+ggplot(data = chinstraps, aes(sample = body_mass_g)) +
+  geom_qq() +
+  facet_wrap(~sex)
+# Close to normally distributed
+
+
+## Get descriptive stats 
+chinstraps %>% 
+  group_by(sex) %>% 
+  summarize(
+    mean_mass = mean(body_mass_g),
+    median_mass = median(body_mass_g),
+    sd_mass = sd(body_mass_g), 
+    sample_size = n()
+  )
+```
+
